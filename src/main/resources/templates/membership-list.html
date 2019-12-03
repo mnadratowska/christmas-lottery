@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Wydarzenia</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="content-container">
+
+    <div class="row col-md-12">
+        <div class="col-md-3 align-content-md-center">
+            <a th:href="@{/event/add}">
+                <button class="btn btn-success h2"> Dodaj wydarzenie</button>
+            </a>
+        </div>
+        <div class="col-md-8" th:if="${!invitations.isEmpty()}">
+            <div class="card col-md-12">
+                <div class="card-header">
+                    <h2>Zaproszenia</h2>
+                    <div class="h6 text-muted">Po losowaniu dołączenie będzie niemożliwe</div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush" th:each="invitation : ${invitations}">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a th:href="@{'/event/details/'+ ${invitation.getEvent().getId()}}"
+                                       th:text="${invitation.getEvent().getName()}" class="text-truncate"></a>
+                                </div>
+                                <div class="col-md-2" th:text="${invitation.getEvent().getDate()}"></div>
+                                <div class="col-md-3">
+                                    <a th:href="@{'/membership/invitation/accept/'+ ${invitation.getId()}}">
+                                        <button class="btn btn-outline-success"
+                                                th:disabled="${invitation.getEvent().isDrawn()}">
+                                            Akceptuj
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a th:href="@{'/membership/invitation/ignore/'+ ${invitation.getId()}}">
+                                        <button class="btn btn-outline-danger">
+                                            Odrzuć
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <br>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>Twoje wydarzenia </h1>
+        </div>
+        <div class="card-body">
+            <div th:if="${events.isEmpty()}" class="alert alert-info">Brak wydarzeń</div>
+            <ul class="list-group list-group-flush" th:each="event : ${events}">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a th:href="@{'/event/details/'+ ${event.getId()}}"
+                               th:text="${event.getName()}"></a>
+                        </div>
+                        <div class="col-md-2" th:text="${event.getDate()}"></div>
+
+                        <div class="col-md-6" th:if="${!event.getEventCreator().getUsername().equals(active_user)}">
+                            <div class="row col-md-12">
+                                <div class="col-md-3">
+                                    <a th:href="@{'/membership/toresign/' + ${event.getId()}}">
+                                        <button class="btn btn-outline-danger">Zrezygnuj</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" th:if="${event.getEventCreator().getUsername().equals(active_user)}">
+                            <div class="row col-md-12">
+                                <div class="col-md-3">
+                                    <a th:href="@{'/membership/event/' + ${event.getId()} + '/join'}">
+                                        <button class="btn btn-outline-success col-md-12"
+                                                th:disabled="${event.hasMembership(active_user) || event.isDrawn()}">
+                                            Dołącz
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a th:href="@{'/membership/event/' + ${event.getId()} + '/invite'}">
+                                        <button type="button" class="btn btn-outline-success col-md-12"
+                                                th:disabled="${event.isDrawn()}"> Zaproś
+                                        </button>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <a th:href="@{'/event/edit/' + ${event.getId()}}">
+                                        <button type="button" class="btn btn-outline-primary col-md-12"> Edytuj
+                                        </button>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <a th:href="@{'/event/remove/' + ${event.getId()}}">
+                                        <button type="button" class="btn btn-outline-danger col-md-12">Usuń
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

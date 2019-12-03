@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Świąteczne losowanie</title>
+
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+<div class="form-container">
+    <div class="col-md-8 offset-2">
+        <div class="card text-center">
+            <div class="card-header">
+                <h2>UWAGA</h2>
+            </div>
+            <div class="card-body">
+                Czy na pewno chcesz zrezygnować z wydarzenia <span class="font-weight-bolder"
+                                                            th:text="${event.getName()}"></span>?
+            </div>
+            <br>
+
+            <div class="row col-md-12">
+                <div class="col-md-6">
+
+                    <a th:href="@{/membership/list}">
+                        <button class="btn btn-outline-info col-md-8">Anuluj</button>
+                    </a>
+
+                </div>
+                <div class="col-md-6">
+                    <a th:href="@{'/membership/resign/'+ ${event.getId()}}">
+                        <button class="btn btn-outline-danger col-md-8">Zrezygnuję</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Dodaj prezent</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="form-container">
+
+    <div class="row col-md-12">
+        <div class="row col-md-12">
+            <h1>Dodaj prezent</h1>
+
+        </div>
+    </div>
+    <div class="alert alert-danger" th:if="${errorMessage!=null}" th:text="${errorMessage}"></div>
+    <form th:action="@{/gift/add}" method="post" th:object="${gift_to_edit}">
+        <input type="hidden" th:field="*{id}" th:value="*{id}">
+        <input type="hidden" th:field="*{account}" th:value="*{account}">
+        <input type="hidden" th:field="*{additionDate}" th:value="*{additionDate}">
+        <input type="hidden" th:field="*{comments}" th:value="*{comments}">
+        <div class="row col-md-12">
+            <label for="name">Nazwa: </label>
+            <input class="form-control" id="name" type="text" th:field="*{name}" th:value="*{name}">
+        </div>
+
+        <div class="row col-md-12">
+            <label for="description">Opis:</label>
+            <textarea class="form-control" id="description" th:field="*{description}"
+                      th:value="*{description}"></textarea>
+        </div>
+
+        <div class="row col-md-12">
+            <label for="price">Przybliżona cena:</label>
+            <input class="form-control" id="price" type="number" th:field="*{price}"
+                   th:value="*{price}">
+        </div>
+
+        <div class="row col-md-12">
+            <label for="link">Link:</label>
+            <input class="form-control" id="link" type="text" th:field="*{link}"
+                   th:value="*{link}">
+        </div>
+
+        <br>
+
+        <div class="row col-md-12">
+            <div class="col-md-6 offset-3">
+                <input class="form-control" type="submit" value="Zapisz">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

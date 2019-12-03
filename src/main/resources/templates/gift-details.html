@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title th:text="${gift.getName()}"></title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="content-container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <!--        <img class="card-img-top img-fluid" src="https://placehold.it/350x180" alt="Alternatywny opis obrazka">-->
+                <div class="card-header">
+                    <h2 class="card-title" th:text="${gift.getName()}"></h2>
+                    <h6 class="card-subtitle text-muted"
+                        th:text="'prezent dla ' + ${gift.getAccount().getUsername()}"></h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:text="${gift.getDescription()}"></li>
+                    <li class="list-group-item" th:text="'Dodano: ' + ${gift.additionDateToString()}"></li>
+                    <li class="list-group-item" th:if="${gift.getLink()!=''}">
+                        Link: <a th:href="${gift.getLinkAdress()}" target="_blank"
+                                 th:text="${gift.getLinkAdress()}"></a>
+                    </li>
+                    <li th:if="${gift.getPrice() != null}" class="list-group-item"
+                        th:text="'Koszt około ' + ${gift.getPrice()} + 'zł'"></li>
+                </ul>
+
+            </div>
+            <br>
+            <a th:href="@{'/gift/list/' + ${gift.getAccount().getId()}}">
+                <button class="btn btn-outline-info">Wróć do listy życzeń</button>
+            </a>
+        </div>
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Komentarze</h3>
+                </div>
+
+
+                <div class="card-body">
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item row" th:each="comment : ${comments}">
+                            <div class="row col-md-12">
+                                <div class="col-md-9">
+                                    <div class="text-justify col-md-12"
+                                         th:text="${comment.getContent()}"></div>
+                                    <div class="blockquote-footer col-md-12"
+                                         th:if="${!comment.getAccount().equals(gift.getAccount())}"
+                                         th:text="${comment.additionTimeToString()}"></div>
+                                    <div class="blockquote-footer col-md-12"
+                                         th:if="${comment.getAccount().equals(gift.getAccount())}"
+                                         th:text="${comment.additionTimeToString()}+ ' ' + ${comment.getAccount().getUsername()}"></div>
+                                </div>
+
+                                <div class="col-md-3"
+                                     th:if="${comment.getAccount().getUsername().equals(active_user)}">
+                                    <a th:href="@{'/comment/delete/' + ${comment.getId()}}">
+                                        <button class="btn btn-outline-danger">Usuń</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{'/comment/add/' + ${gift.getId()}}" method="post">
+                        <div>
+                            <input class="form-control" id="search" type="text" name="comment" placeholder="Skomentuj">
+                        </div>
+                        <div>
+                            <input class="form-control" type="submit" value="Dodaj komentarz">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

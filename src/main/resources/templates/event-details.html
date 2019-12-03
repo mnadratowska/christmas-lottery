@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title th:text="${event.getName()}"></title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="content-container">
+
+    <div class="card-columns">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title" th:text="${event.getName()}"></h2>
+                <h6 class="text-muted" th:text="'stworzone przez ' + ${event.getEventCreator().getUsername()}"></h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text="${event.getDescription()}"></li>
+                <li class="list-group-item" th:text="'Data: ' + ${event.getDate()}"></li>
+                <li class="list-group-item" th:text="'Kwota: ' + ${event.getAmount() + 'zł'} "></li>
+            </ul>
+            <div class="card-body" th:if="${event.getEventCreator().getUsername().equals(active_user)}">
+                <a th:href="@{'/event/draw/' + ${event.getId()}}">
+                    <button type="button" class="btn btn-outline-success"
+                            th:disabled="${event.isDrawn() || event.numberOfInvitations()>0}">
+                        LOSOWANIE
+                    </button>
+                </a>
+                <br>
+                <div class="alert alert-danger" th:if="${event.numberOfInvitations()>0}">
+                    UWAGA!
+                    <br>
+                    Liczba zaproszeń bez odpowiedzi: <span th:text="${event.numberOfInvitations()}"></span>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Wynik losowania</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info" th:if="${!event.isDrawn()}">
+                    Losowanie jeszcze się nie odbyło.
+                </div>
+
+                <div th:if="${event.isDrawn() && event.hasMembership(active_user)}">
+                    Robisz prezent dla <span
+                        th:text="${event.getTakerByGiver(active_user).getUsername().toUpperCase()}"></span>
+
+
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush row "
+                            th:each="gift : ${event.getTakerByGiver(active_user).getGifts()}">
+                            <li class="list-group-item " th:if="${gift.getPrice()<event.getAmount()+10}">
+                                <div class="row col-md-12">
+                                    <div class="col-md-9 text-truncate">
+                                        <a th:href="@{'/gift/details/' + ${gift.getId()}}"
+                                           th:text="${gift.getName()}"></a>
+                                    </div>
+                                    <div class="col-md-3" th:text="${gift.getPrice()} + 'zł'"
+                                         th:if="${gift.getPrice() != null}">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <a th:href="@{'/gift/list/' + ${event.getTakerByGiver(active_user).getId()}}">
+                            <button class="btn btn-outline-success col-md-12">Pełna lista życzeń</button>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Uczestnicy losowania</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush" th:each="member : ${event.getAcceptedMemberships()}">
+                    <li class="list-group-item" th:text="${member.getGiver().getUsername()}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

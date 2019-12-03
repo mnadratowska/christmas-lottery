@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:fragment="styleLinks">
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+    </th:block>
+</head>
+<body>
+<th:block th:fragment="navigator">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-darkgreen">
+            <a class="navbar-brand" th:href="@{/}">Świąteczne losowanie</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/gift/list}" sec:authorize="isAuthenticated()"> Moje
+                            życzenia </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/membership/list}" sec:authorize="isAuthenticated()">
+                            Wydarzenia </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/account/list}" sec:authorize="hasRole('ADMIN')">User
+                            list</a>
+                    </li>
+                </ul>
+                <div class="form-inline mt-2 mt-md-0">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">Wyloguj</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/register}"
+                               sec:authorize="!isAuthenticated()">Rejestracja</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="navbar-brand" th:href="@{/login}" sec:authorize="!isAuthenticated()">Zaloguj </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</th:block>
+
+
+<th:block th:fragment="footer">
+    <footer class="container">
+        <!--        <p class="float-right"><a href="#">Back to top</a></p>-->
+        <!--        <p>&copy; 2019 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>-->
+    </footer>
+</th:block>
+
+
+<th:block th:fragment="jsScripts">
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.14.3/popper.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</th:block>
+</body>
+</html>
+

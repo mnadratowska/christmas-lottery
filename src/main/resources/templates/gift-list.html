@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Lista życzeń</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="form-container">
+
+    <div class="card" th:if="${user == active_user}">
+
+        <div class="card-header">
+            <div class="row col-12">
+                <div class="col-10">
+                    <h1>Lista życzeń użytkownika <span th:text="${user}"></span>
+                    </h1>
+                </div>
+                <div class="col-2">
+                    <a th:href="@{/gift/add}">
+                        <button class="btn btn-success">Dodaj prezent</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" th:if="${gifts.isEmpty()}">
+            <div class="alert alert-info">Nie masz aktualnie żadnego życzenia.</div>
+        </div>
+        <ul class="list-group list-group-flush" th:if="${!gifts.isEmpty()}">
+            <li class="list-group-item">
+                <div class="row col-md-12">
+                    <div class="col-md-4"> Nazwa</div>
+                    <div class="col-md-1"> Koszt</div>
+                    <div class="col-md-3"> Ostatni komentarz</div>
+                    <div class="col-md-3 text-center"> Opcje</div>
+                </div>
+            </li>
+            <li class="list-group-item" th:each="gift : ${gifts}">
+                <div class="row col-md-12">
+                    <div class="col-md-4 text-truncate"> &#127873;
+                        <a th:href="@{'/gift/details/' + ${gift.getId()}}" th:text="${gift.getName()}"></a>
+                    </div>
+                    <div class="col-md-1">
+                        <div th:if="${gift.getPrice() != null}" th:text="${gift.getPrice()} + 'zł'"></div>
+                    </div>
+                    <div class="col-md-3 text-truncate"><i th:text="${gift.getLastComment()}"></i>
+                    </div>
+                    <div class="col-md-2">
+                        <a th:href="@{'/gift/edit/' + ${gift.getId()}}">
+                            <button type="button" class="btn btn-outline-info col-md-12"> Edytuj
+                            </button>
+                        </a>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a th:href="@{'/gift/remove/' + ${gift.getId()}}">
+                            <button type="button" class="btn btn-outline-danger col-md-12">Usuń
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="card" th:if="${user != active_user}">
+
+        <div class="card-header">
+            <h1>Lista życzeń użytkownika <span th:text="${user}"></span></h1>
+        </div>
+        <div class="card-body" th:if="${gifts.isEmpty()}">
+            <div class="alert alert-info"><span class="fa-bold" th:text="${user}"></span> nie ma aktualnie żadnego
+                życzenia.
+            </div>
+        </div>
+        <ul class="list-group list-group-flush" th:if="${!gifts.isEmpty()}">
+            <li class="list-group-item">
+
+                <div class="row col-md-12">
+                    <div class="col-md-5"> Nazwa</div>
+                    <div class="col-md-2">Koszt</div>
+                    <div class="col-md-5"> Ostatni komentarz</div>
+
+                </div>
+            </li>
+            <li class="list-group-item" th:each="gift : ${gifts}">
+                <div class="row col-md-12">
+                    <div class="col-md-5 text-truncate"> &#127873;
+                        <a th:href="@{'/gift/details/' + ${gift.getId()}}" th:text="${gift.getName()}"></a>
+                    </div>
+                    <div class="col-md-2">
+                        <div th:if="${gift.getPrice() != null}" th:text="${gift.getPrice()} + 'zł'"></div>
+                    </div>
+                    <div class="col-md-5 text-truncate"><i th:text="${gift.getLastComment()}"></i>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

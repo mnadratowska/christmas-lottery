@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Zaproś</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+
+<div class="content-container">
+    <div class="container">
+        <div class="row col-md-12">
+            <div class="col-md-10">
+                <a th:href="@{'/event/details/' + ${event.getId()}}" class="h1" th:text="${event.getName()}"></a>
+            </div>
+            <div class="col-md-2">
+                <a th:href="@{/membership/list}">
+                    <button class="btn btn-outline-info col-md-12">Wróć</button>
+                </a>
+            </div>
+        </div>
+        <!--<form th:action="@{'/invitation/invite/event/' + ${event.getId()} +'/search'}" method="post">
+            <div class="row col-md-6">
+                <div class="col-md-8">
+                    <input class="form-control" id="search" type="text" name="username"
+                           placeholder="Search by username..." th:value="${user_name}">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="submit">
+                </div>
+            </div>
+        </form>-->
+    </div>
+</div>
+<div class="form-container">
+    <div class="row col-md-12 list-header-row">
+        <div class="col-md-3"> Username</div>
+    </div>
+
+    <div th:each="account : ${accounts}">
+        <div class="row col-md-12 list-row" th:if="${account.getUsername() != active_user}">
+            <div class="col-md-6" th:text="${account.getUsername().toUpperCase()}"></div>
+            <div class="col-md-3">
+                <a th:href="@{'/membership/event/' + ${event.getId()} + '/invite/' + ${account.getId()} }">
+                    <button class="btn btn-outline-success"
+                            th:disabled="${event.hasInvitation(account.getUsername()) || event.isDrawn()}"> Zaproś
+                    </button>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a th:href="@{'/membership/event/' + ${event.getId()} + '/cancel/' + ${account.getId()} }">
+                    <button class="btn btn-outline-danger"
+                            th:disabled="${!event.hasInvitation(account.getUsername()) || event.isDrawn()}"> Cofnij
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

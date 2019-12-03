@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Dodaj okazję</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="form-container">
+    <div class="row col-md-12">
+        <div class="row col-md-12">
+            <h1>Dodaj wydarzenie</h1>
+        </div>
+    </div>
+    <div class="alert alert-danger" th:if="${errorMessage!=null}" th:text="${errorMessage}"></div>
+    <form th:action="@{/event/add}" method="post" th:object="${event_to_edit}">
+
+        <input type="hidden" th:field="*{id}" th:value="*{id}">
+        <input type="hidden" th:field="*{eventCreator}" th:value="*{eventCreator}">
+        <input type="hidden" th:field="*{memberships}" th:value="*{memberships}">
+        <input type="hidden" th:field="*{drawn}" th:value="*{drawn}">
+
+
+        <div class="row col-md-12">
+            <label for="name">Nazwa:</label>
+            <input class="form-control" id="name" type="text" th:field="*{name}" th:value="*{name}">
+        </div>
+
+        <div class="row col-md-12">
+            <label for="description">Opis:</label>
+            <textarea class="form-control" id="description" th:field="*{description}"
+                      th:value="*{description}"></textarea>
+        </div>
+
+        <div class="row col-md-3">
+            <label for="amount">Kwota (zł):</label>
+            <input class="form-control" id="amount" type="number" th:field="*{amount}" th:value="*{amount}">
+        </div>
+
+
+        <div class="row col-md-3">
+            <label for="data">Data losowania:</label>
+            <input class="form-control" id="data" type="date" th:field="*{date}"
+                   th:value="*{date}">
+        </div>
+
+        <br>
+
+        <div class="row col-md-12">
+            <div class="col-md-6 offset-3">
+                <input class="form-control" type="submit" value="Zapisz">
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>

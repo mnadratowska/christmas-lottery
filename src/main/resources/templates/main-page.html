@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="fragments :: styleLinks" th:remove="tag"></th:block>
+    <meta charset="UTF-8">
+    <title>Świąteczne losowanie</title>
+</head>
+<body>
+<th:block th:replace="fragments :: navigator" th:remove="tag"></th:block>
+
+<div class="content-container align-items-center">
+
+    <div class="alert alert-success" th:if="${number_of_invitations > 0}">
+        Masz zaproszenie do wydarzenia. <a th:href="@{/membership/list}">Zobacz</a>
+    </div>
+
+
+    <h1> Witaj <span th:text="${active_user}"></span>! </h1>
+    <div class="alert alert-success" th:if="${memberships.isEmpty()}">
+        Aktualnie nie bierzesz udziału w żadnym wydarzeniu.</a>
+    </div>
+    <h3 th:if="${!memberships.isEmpty()}">Bierzesz udział w wydarzeniach:</h3>
+    <div class="card-columns">
+        <div th:each="membership : ${memberships}">
+            <div class="card">
+                <div class="card-header">
+                    <a th:href="@{'/event/details/' + ${membership.getEvent().getId()}}"
+                       th:text="${membership.getEvent().getName()}"></a>
+                </div>
+                <div class="card-body">
+                    <div th:if="${membership.getTaker() == null}">
+                        <p class="alert alert-info">Losowanie jeszcze się nie odbyło.
+                        <p> Przewidywana data losowania: <span th:text="${membership.getEvent().getDate()}"></span></p>
+                    </div>
+                    <div th:if="${membership.getTaker() != null}">
+                        Robisz prezent dla <a th:href="@{'/gift/list/' + ${membership.getTaker().getId()}}"
+                                              th:text="${membership.getTaker().getUsername()}"></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="fragments :: footer" th:remove="tag"></th:block>
+<th:block th:replace="fragments :: jsScripts" th:remove="tag"></th:block>
+</body>
+</html>
